@@ -1,0 +1,23 @@
+.editorContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.editorContent {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.canvasContainer {
+  flex: 1;
+  overflow: auto;
+  background-color: var(--canvas-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-origin: top left;
+}

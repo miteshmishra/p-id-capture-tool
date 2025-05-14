@@ -1,0 +1,53 @@
+.contextMenu {
+  position: fixed;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  min-width: 150px;
+  z-index: 1000;
+}
+
+.menuSection {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.menuSection:last-child {
+  border-bottom: none;
+}
+
+.menuHeader {
+  padding: 4px 12px;
+  font-weight: bold;
+  color: #666;
+  font-size: 12px;
+}
+
+.menuItem {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  background-color: #f5f5f5;
+}
+
+.colorOptions {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 8px;
+  gap: 8px;
+}
+
+.colorOption {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid #ddd;
+}
+
+.colorOption:hover {
+  transform: scale(1.1);
+}

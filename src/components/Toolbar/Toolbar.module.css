@@ -1,0 +1,175 @@
+.toolbarContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.topToolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background-color: var(--toolbar-bg);
+  border-bottom: 1px solid var(--toolbar-border);
+}
+
+.fileOperations, .viewControls {
+  display: flex;
+  gap: 8px;
+}
+
+.fileButton, .viewButton {
+  padding: 6px 12px;
+  background-color: var(--toolbar-button-bg);
+  border: 1px solid var(--toolbar-button-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--foreground);
+}
+
+.fileButton:hover, .viewButton:hover {
+  background-color: var(--toolbar-button-hover);
+}
+
+.mainContent {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebarContainer {
+  display: flex;
+  width: 250px;
+  border-right: 1px solid var(--toolbar-border);
+  background-color: var(--toolbar-bg);
+}
+
+.categorySidebar {
+  width: 100px;
+  border-right: 1px solid var(--toolbar-border);
+  overflow-y: auto;
+}
+
+.categoryButton {
+  width: 100%;
+  padding: 10px 8px;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--toolbar-border);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--foreground);
+}
+
+.categoryButton:hover {
+  background-color: var(--toolbar-button-hover);
+}
+
+.activeCategory {
+  background-color: var(--toolbar-button-hover);
+  font-weight: bold;
+  border-left: 3px solid var(--button-primary);
+}
+
+.toolsPanel {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.toolsPanel h3 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: var(--foreground);
+}
+
+.toolGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.toolButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background-color: var(--toolbar-button-bg);
+  border: 1px solid var(--toolbar-button-border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--foreground);
+}
+
+.toolButton:hover {
+  background-color: var(--toolbar-button-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.toolButton.selected {
+  background-color: var(--toolbar-button-selected);
+  border-color: var(--toolbar-button-selected-border);
+}
+
+.toolIcon {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.toolName {
+  font-size: 11px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.propertiesPanel {
+  width: 200px;
+  padding: 10px;
+  background-color: var(--properties-bg);
+  border-left: 1px solid var(--properties-border);
+  overflow-y: auto;
+}
+
+.propertiesPanel h3 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: var(--foreground);
+}
+
+.propertyGroups {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.propertyGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.propertyGroup label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.propertyGroup input,
+.propertyGroup select {
+  padding: 5px;
+  border: 1px solid var(--input-border);
+  border-radius: 3px;
+  font-size: 12px;
+  background-color: var(--input-bg);
+  color: var(--foreground);
+}
+
+.noSelection {
+  font-size: 12px;
+  opacity: 0.7;
+  font-style: italic;
+}

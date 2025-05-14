@@ -1,13 +1,73 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --card-bg: #ffffff;
+  --card-border: #e0e0e0;
+  --input-bg: #ffffff;
+  --input-border: #dddddd;
+  --button-primary: #4a90e2;
+  --button-primary-hover: #3a80d2;
+  --button-text: #ffffff;
+  --error: #e74c3c;
+  --hint: #777777;
+  
+  /* Editor specific */
+  --header-bg: #2c3e50;
+  --header-text: #ffffff;
+  --header-button-hover: #34495e;
+  --dropdown-bg: #ffffff;
+  --dropdown-border: #dddddd;
+  --dropdown-text: #333333;
+  --dropdown-hover: #f5f5f5;
+  --footer-bg: #f0f0f0;
+  --footer-text: #555555;
+  --footer-border: #dddddd;
+  --toolbar-bg: #f5f5f5;
+  --toolbar-border: #dddddd;
+  --toolbar-button-bg: #ffffff;
+  --toolbar-button-border: #dddddd;
+  --toolbar-button-hover: #f0f0f0;
+  --toolbar-button-selected: #e0e0ff;
+  --toolbar-button-selected-border: #9090ff;
+  --canvas-bg: #f0f0f0;
+  --properties-bg: #f5f5f5;
+  --properties-border: #dddddd;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme='dark'] {
+  --background: #1a1a1a;
+  --foreground: #ededed;
+  --card-bg: #222222;
+  --card-border: #444444;
+  --input-bg: #333333;
+  --input-border: #444444;
+  --button-primary: #3a80d2;
+  --button-primary-hover: #2a70c2;
+  --button-text: #ffffff;
+  --error: #e74c3c;
+  --hint: #aaaaaa;
+  
+  /* Editor specific */
+  --header-bg: #1a1a2e;
+  --header-text: #ffffff;
+  --header-button-hover: #2a2a3e;
+  --dropdown-bg: #333333;
+  --dropdown-border: #444444;
+  --dropdown-text: #dddddd;
+  --dropdown-hover: #444444;
+  --footer-bg: #222222;
+  --footer-text: #bbbbbb;
+  --footer-border: #444444;
+  --toolbar-bg: #222222;
+  --toolbar-border: #444444;
+  --toolbar-button-bg: #333333;
+  --toolbar-button-border: #555555;
+  --toolbar-button-hover: #444444;
+  --toolbar-button-selected: #3a3a6a;
+  --toolbar-button-selected-border: #5a5a9a;
+  --canvas-bg: #1a1a1a;
+  --properties-bg: #222222;
+  --properties-border: #444444;
 }
 
 html,
@@ -19,9 +79,10 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans, Arial, Helvetica, sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 * {
@@ -33,10 +94,4 @@ body {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }
