@@ -1,0 +1,50 @@
+.connectionStyleSelector {
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.connectionStyleSelector h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.styleOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.styleButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px 8px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.styleButton:hover {
+  background-color: #f0f0f0;
+  border-color: #aaa;
+}
+
+.styleButton.selected {
+  background-color: #e6f7ff;
+  border-color: #1890ff;
+}
+
+.styleIcon {
+  font-size: 18px;
+  margin-bottom: 3px;
+}
+
+.styleLabel {
+  font-size: 12px;
+} 

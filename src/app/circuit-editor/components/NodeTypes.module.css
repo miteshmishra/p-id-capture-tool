@@ -1,0 +1,332 @@
+.circuitNode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  min-width: 100px;
+  min-height: 60px;
+  background-color: white;
+  border: 2px solid #1A192B;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.circuitNode:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.selected {
+  border: 2px solid #ff0072;
+  box-shadow: 0 0 10px rgba(255, 0, 114, 0.5);
+}
+
+.handle {
+  width: 10px;
+  height: 10px;
+  background-color: #1A192B;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px rgba(26, 25, 43, 0.5);
+}
+
+.handle:hover {
+  background-color: #ff0072;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  font-size: 12px;
+}
+
+.icon {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.label {
+  text-align: center;
+  font-size: 12px;
+  color: #333;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.value {
+  font-size: 10px;
+  color: #666;
+  margin-top: 2px;
+  padding: 2px 4px;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+}
+
+/* Resistor */
+.resistor {
+  min-width: 100px;
+  min-height: 60px;
+}
+
+.resistorSymbol {
+  width: 80px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resistorBody {
+  width: 60px;
+  height: 20px;
+  border: 2px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.zigzag {
+  width: 50px;
+  height: 10px;
+  background: 
+    linear-gradient(45deg, transparent 33.3%, #000 33.3%, #000 66.6%, transparent 66.6%),
+    linear-gradient(-45deg, transparent 33.3%, #000 33.3%, #000 66.6%, transparent 66.6%);
+  background-size: 10px 10px;
+  background-position: 0 0;
+}
+
+/* Capacitor */
+.capacitor {
+  min-width: 80px;
+  min-height: 60px;
+}
+
+.capacitorSymbol {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  width: 60px;
+}
+
+.capacitorPlate {
+  width: 4px;
+  height: 20px;
+  background-color: #000;
+}
+
+.capacitorGap {
+  width: 10px;
+}
+
+/* Inductor */
+.inductor {
+  min-width: 80px;
+  min-height: 60px;
+}
+
+.inductorSymbol {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  width: 60px;
+}
+
+.loopContainer {
+  display: flex;
+  width: 60px;
+}
+
+.loop {
+  width: 15px;
+  height: 20px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  border-right: none;
+  border-left: none;
+}
+
+/* Diode */
+.diode {
+  min-width: 80px;
+  min-height: 60px;
+}
+
+.diodeSymbol {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  width: 60px;
+}
+
+.diodeLine {
+  width: 2px;
+  height: 20px;
+  background-color: #000;
+}
+
+.diodeTriangle {
+  width: 0;
+  height: 0;
+  border-left: 10px solid #000;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}
+
+/* Battery */
+.battery {
+  min-width: 80px;
+  min-height: 60px;
+}
+
+.batterySymbol {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  width: 40px;
+}
+
+.batteryNegative {
+  width: 10px;
+  height: 2px;
+  background-color: #000;
+  margin-right: 5px;
+}
+
+.batteryPositive {
+  position: relative;
+  width: 10px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.batteryPositive::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 2px;
+  background-color: #000;
+}
+
+.batteryPositive::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 10px;
+  background-color: #000;
+}
+
+/* Switch */
+.switch {
+  min-width: 80px;
+  min-height: 60px;
+  cursor: pointer;
+}
+
+.switchSymbol {
+  position: relative;
+  width: 40px;
+  height: 20px;
+}
+
+.switchLine {
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  background-color: #000;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.switchLever {
+  position: absolute;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background-color: #000;
+  top: 50%;
+  transform: rotate(-30deg);
+  transform-origin: left center;
+  transition: transform 0.3s ease;
+}
+
+.switchOpen {
+  transform: rotate(30deg);
+}
+
+.switchState {
+  font-size: 10px;
+  color: #666;
+  margin-top: 2px;
+  padding: 2px 4px;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+}
+
+/* Ground */
+.ground {
+  min-width: 50px;
+  min-height: 60px;
+}
+
+.groundSymbol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+}
+
+.groundLine {
+  width: 2px;
+  height: 10px;
+  background-color: #000;
+}
+
+.groundLinesContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.groundLineSmall {
+  width: 10px;
+  height: 2px;
+  background-color: #000;
+}
+
+.groundLineMedium {
+  width: 16px;
+  height: 2px;
+  background-color: #000;
+}
+
+.groundLineLarge {
+  width: 22px;
+  height: 2px;
+  background-color: #000;
+}
+
+/* IC */
+.ic {
+  background-color: #f0f0f0;
+  border-radius: 0;
+  border-color: #000;
+  text-align: center;
+  position: relative;
+}
+
+.icInfo {
+  font-size: 10px;
+  color: #666;
+  margin-top: 4px;
+} 
