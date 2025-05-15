@@ -3,6 +3,16 @@
 import React, { useRef, useEffect } from 'react';
 import styles from './ContextMenu.module.css';
 
+// Available colors for edge styling
+const edgeColors = [
+  { color: '#555', label: 'Gray' },
+  { color: '#1a73e8', label: 'Blue' },
+  { color: '#d93025', label: 'Red' },
+  { color: '#188038', label: 'Green' },
+  { color: '#f9ab00', label: 'Yellow' },
+  { color: '#9334e6', label: 'Purple' },
+];
+
 const ContextMenu = ({ 
   show, 
   position, 
@@ -12,7 +22,10 @@ const ContextMenu = ({
   onBringToFront, 
   onSendToBack,
   onRotate,
-  elementType
+  elementType,
+  onEdgeStyleChange,
+  onEdgeColorChange,
+  edge
 }) => {
   const menuRef = useRef(null);
   
@@ -133,6 +146,94 @@ const ContextMenu = ({
               <span className={styles.icon}>🔄</span>
               Rotate 180°
             </li>
+          </>
+        )}
+        
+        {elementType === 'edge' && (
+          <>
+            <li className={styles.divider}></li>
+            
+            {onEdgeStyleChange && (
+              <>
+                <li className={styles.menuHeader}>Connection Style</li>
+                
+                <li 
+                  className={styles.menuItem}
+                  onClick={() => {
+                    onEdgeStyleChange('smoothstep');
+                    onClose();
+                  }}
+                >
+                  <span className={styles.icon}>〰️</span>
+                  Smooth Connection
+                </li>
+                
+                <li 
+                  className={styles.menuItem}
+                  onClick={() => {
+                    onEdgeStyleChange('straight');
+                    onClose();
+                  }}
+                >
+                  <span className={styles.icon}>➖</span>
+                  Straight Connection
+                </li>
+                
+                <li 
+                  className={styles.menuItem}
+                  onClick={() => {
+                    onEdgeStyleChange('step');
+                    onClose();
+                  }}
+                >
+                  <span className={styles.icon}>┐┌</span>
+                  Step Connection
+                </li>
+                
+                <li 
+                  className={styles.menuItem}
+                  onClick={() => {
+                    onEdgeStyleChange('bezier');
+                    onClose();
+                  }}
+                >
+                  <span className={styles.icon}>⤳</span>
+                  Bezier Connection
+                </li>
+                
+                <li 
+                  className={styles.menuItem}
+                  onClick={() => {
+                    onEdgeStyleChange('bidirectional');
+                    onClose();
+                  }}
+                >
+                  <span className={styles.icon}>↔️</span>
+                  Bidirectional
+                </li>
+              </>
+            )}
+            
+            {onEdgeColorChange && (
+              <>
+                <li className={styles.menuHeader}>Connection Color</li>
+                
+                <li className={styles.colorContainer}>
+                  {edgeColors.map((colorOption) => (
+                    <div 
+                      key={colorOption.color}
+                      className={styles.colorItem}
+                      style={{ backgroundColor: colorOption.color }}
+                      title={colorOption.label}
+                      onClick={() => {
+                        onEdgeColorChange(colorOption.color);
+                        onClose();
+                      }}
+                    />
+                  ))}
+                </li>
+              </>
+            )}
           </>
         )}
       </ul>

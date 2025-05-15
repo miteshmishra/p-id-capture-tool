@@ -20,7 +20,14 @@ import Footer from '../../components/Footer/Footer';
 import CircuitComponentsPanel from './components/CircuitComponentsPanel';
 import PropertiesPanel from './components/PropertiesPanel';
 import ContextMenu from './components/ContextMenu';
+import ConnectionStyleSelector from './components/ConnectionStyleSelector';
+import BidirectionalEdge from './components/BidirectionalEdge';
 import { nodeTypes } from './components/NodeTypes';
+
+// Define custom edge types
+const edgeTypes = {
+  bidirectional: BidirectionalEdge,
+};
 
 export default function CircuitEditor() {
   const reactFlowWrapper = useRef(null);
@@ -30,6 +37,10 @@ export default function CircuitEditor() {
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [selectedElements, setSelectedElements] = useState({ nodes: [], edges: [] });
   const [clipboard, setClipboard] = useState({ nodes: [], edges: [] });
+  
+  // Connection styling state
+  const [connectionType, setConnectionType] = useState('smoothstep');
+  const [connectionColor, setConnectionColor] = useState('#555');
   
   // Context menu state
   const [contextMenu, setContextMenu] = useState({
@@ -90,7 +101,7 @@ export default function CircuitEditor() {
     setHistoryIndex(newHistory.length - 1);
   }, [history, historyIndex, nodes, edges, isUndoRedo]);
 
-  // Handle connecting nodes - enhancing this for better connectivity
+  // Handle connecting nodes
   const onConnect = useCallback(
     (params) => {
       // Validate connection
@@ -103,18 +114,27 @@ export default function CircuitEditor() {
       const newEdge = {
         ...params,
         id: edgeId,
-        type: 'smoothstep',  // Use smoothstep for nice curved edges
+        type: connectionType,
         animated: false,
         style: { 
           strokeWidth: 2,
-          stroke: '#555'
+          stroke: connectionColor
         },
+        // Add both markers for bidirectional type
         markerEnd: {
           type: 'arrow',
           width: 15,
           height: 15,
-          color: '#555',
+          color: connectionColor,
         },
+        ...(connectionType === 'bidirectional' && {
+          markerStart: {
+            type: 'arrow',
+            width: 15,
+            height: 15,
+            color: connectionColor,
+          }
+        })
       };
       
       // Save state before adding new edge
@@ -123,7 +143,7 @@ export default function CircuitEditor() {
       // Add the edge to the state
       setEdges((eds) => addEdge(newEdge, eds));
     },
-    [setEdges, saveCurrentStateToHistory]
+    [setEdges, saveCurrentStateToHistory, connectionType, connectionColor]
   );
 
   // Enhanced validation to allow connections regardless of position
@@ -443,14 +463,106 @@ export default function CircuitEditor() {
     }
   }, [setNodes, setEdges, saveCurrentStateToHistory]);
 
+  // Handle connection type change
+  const handleConnectionTypeChange = useCallback((type) => {
+    setConnectionType(type);
+  }, []);
+  
+  // Handle connection color change
+  const handleConnectionColorChange = useCallback((color) => {
+    setConnectionColor(color);
+  }, []);
+
+  // Update individual edge style
+  const updateEdgeStyle = useCallback((edgeId, style) => {
+    if (!edgeId) return;
+    
+    saveCurrentStateToHistory();
+    
+    setEdges(edges => 
+      edges.map(edge => {
+        if (edge.id === edgeId) {
+          // For bidirectional style, add a marker at the start
+          if (style === 'bidirectional') {
+            return {
+              ...edge,
+              type: style,
+              markerStart: {
+                type: 'arrow',
+                width: 15,
+                height: 15,
+                color: edge.style?.stroke || connectionColor,
+              }
+            };
+          } 
+          // For other styles, remove the start marker
+          else {
+            const { markerStart, ...restEdge } = edge;
+            return {
+              ...restEdge,
+              type: style
+            };
+          }
+        }
+        return edge;
+      })
+    );
+  }, [setEdges, saveCurrentStateToHistory, connectionColor]);
+
+  // Update individual edge color
+  const updateEdgeColor = useCallback((edgeId, color) => {
+    if (!edgeId) return;
+    
+    saveCurrentStateToHistory();
+    
+    setEdges(edges => 
+      edges.map(edge => {
+        if (edge.id === edgeId) {
+          const updatedEdge = {
+            ...edge,
+            style: {
+              ...edge.style,
+              stroke: color
+            },
+            markerEnd: {
+              ...edge.markerEnd,
+              color: color
+            }
+          };
+          
+          // Add markerStart update if bidirectional
+          if (edge.type === 'bidirectional' && edge.markerStart) {
+            updatedEdge.markerStart = {
+              ...edge.markerStart,
+              color: color
+            };
+          }
+          
+          return updatedEdge;
+        }
+        return edge;
+      })
+    );
+  }, [setEdges, saveCurrentStateToHistory]);
+
   // Handle Save
   const handleSave = useCallback(() => {
     if (reactFlowInstance) {
       const flow = reactFlowInstance.toObject();
-      localStorage.setItem('circuit-flow', JSON.stringify(flow));
+      
+      // Save connection style settings with the circuit
+      const dataToSave = {
+        ...flow,
+        settings: {
+          connectionType,
+          connectionColor
+        }
+      };
+      
+      localStorage.setItem('circuit-flow', JSON.stringify(dataToSave));
       alert('Circuit saved!');
     }
-  }, [reactFlowInstance]);
+  }, [reactFlowInstance, connectionType, connectionColor]);
 
   // Handle Load
   const handleLoad = useCallback(() => {
@@ -458,8 +570,20 @@ export default function CircuitEditor() {
     if (savedFlow && reactFlowInstance) {
       const flow = JSON.parse(savedFlow);
       saveCurrentStateToHistory();
+      
       setNodes(flow.nodes || []);
       setEdges(flow.edges || []);
+      
+      // Load connection style settings if they exist
+      if (flow.settings) {
+        if (flow.settings.connectionType) {
+          setConnectionType(flow.settings.connectionType);
+        }
+        if (flow.settings.connectionColor) {
+          setConnectionColor(flow.settings.connectionColor);
+        }
+      }
+      
       setTimeout(() => {
         reactFlowInstance.fitView({ padding: 0.2 });
       }, 50);
@@ -631,22 +755,23 @@ export default function CircuitEditor() {
               onDrop={onDrop}
               onDragOver={onDragOver}
               nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
               onSelectionChange={onSelectionChange}
               onContextMenu={onContextMenu}
               isValidConnection={isValidConnection}
-              connectionLineStyle={{ stroke: '#555', strokeWidth: 2 }}
-              connectionLineType="smoothstep"
+              connectionLineStyle={{ stroke: connectionColor, strokeWidth: 2 }}
+              connectionLineType={connectionType}
               snapToGrid
               snapGrid={[20, 20]}
               minZoom={0.1}
               maxZoom={10}
               defaultViewport={{ x: 0, y: 0, zoom: 1 }}
               defaultEdgeOptions={{ 
-                type: 'smoothstep', 
+                type: connectionType, 
                 animated: false,
                 style: { 
                   strokeWidth: 2,
-                  stroke: '#555'
+                  stroke: connectionColor
                 },
                 markerEnd: {
                   type: 'arrow',
@@ -684,6 +809,15 @@ export default function CircuitEditor() {
                   <button onClick={() => handleExport('json')} title="Export as JSON">Export JSON</button>
                 </div>
               </Panel>
+              
+              <Panel position="top-left" className={styles.panel}>
+                <ConnectionStyleSelector 
+                  currentStyle={connectionType}
+                  currentColor={connectionColor}
+                  onStyleChange={handleConnectionTypeChange}
+                  onColorChange={handleConnectionColorChange}
+                />
+              </Panel>
             </ReactFlow>
             
             {/* Context Menu */}
@@ -697,6 +831,10 @@ export default function CircuitEditor() {
               onSendToBack={sendToBack}
               onRotate={rotateNode}
               elementType={contextMenu.elementType}
+              onEdgeStyleChange={(style) => updateEdgeStyle(contextMenu.elementId, style)}
+              onEdgeColorChange={(color) => updateEdgeColor(contextMenu.elementId, color)}
+              edge={contextMenu.elementType === 'edge' ? 
+                edges.find(edge => edge.id === contextMenu.elementId) : null}
             />
           </div>
           

@@ -4,7 +4,7 @@
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  min-width: 160px;
+  min-width: 180px;
   padding: 5px 0;
   font-size: 13px;
   user-select: none;
@@ -44,6 +44,14 @@
   background-color: #e0e0e0;
 }
 
+.menuHeader {
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+  background-color: #f9f9f9;
+}
+
 .icon {
   margin-right: 8px;
   font-size: 14px;
@@ -56,4 +64,27 @@
   height: 1px;
   background-color: #e0e0e0;
   margin: 5px 0;
+}
+
+/* Color selection */
+.colorContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 12px;
+}
+
+.colorItem {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #eee;
+  transition: transform 0.2s;
+}
+
+.colorItem:hover {
+  transform: scale(1.1);
+  border-color: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 } 

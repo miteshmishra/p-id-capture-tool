@@ -3,13 +3,18 @@
   background-color: #f5f5f5;
   border-radius: 5px;
   margin-bottom: 10px;
+  width: 220px;
 }
 
 .connectionStyleSelector h4 {
-  margin-top: 0;
+  margin-top: 10px;
   margin-bottom: 8px;
   font-size: 14px;
   color: #333;
+}
+
+.connectionStyleSelector h4:first-child {
+  margin-top: 0;
 }
 
 .styleOptions {
@@ -47,4 +52,30 @@
 
 .styleLabel {
   font-size: 12px;
+}
+
+/* Color options */
+.colorOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.colorButton {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #eee;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.colorButton:hover {
+  transform: scale(1.1);
+}
+
+.colorButton.selected {
+  border-color: #fff;
+  box-shadow: 0 0 0 2px #1890ff;
 } 
