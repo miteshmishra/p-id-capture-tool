@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./ConnectionStyleSelector.module.css";
 
 const ConnectionStyleSelector = ({
@@ -10,6 +10,27 @@ const ConnectionStyleSelector = ({
     setConnectionColor,
 }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+    const buttonRef = useRef(null);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target) &&
+                buttonRef.current &&
+                !buttonRef.current.contains(event.target)
+            ) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -21,7 +42,7 @@ const ConnectionStyleSelector = ({
         { value: "smoothstep", label: "Smooth Orthogonal" },
         { value: "bezier", label: "Bezier Curve" },
         { value: "bidirectional", label: "Bidirectional" },
-        { value: "pipe", label: "P&ID Pipe (Main)" },
+        { value: "pipe", label: "P&ID Pipe" },
     ];
 
     const pipeStyles = [
@@ -46,8 +67,8 @@ const ConnectionStyleSelector = ({
     ];
 
     const colors = [
-        { value: "#555", label: "Default (Gray)" },
         { value: "#000", label: "Black" },
+        { value: "#555", label: "Gray" },
         { value: "#2196F3", label: "Blue" },
         { value: "#4CAF50", label: "Green" },
         { value: "#F44336", label: "Red" },
@@ -59,6 +80,14 @@ const ConnectionStyleSelector = ({
         if (type === "pipe") {
             // When selecting pipe, set color differently to make it visible
             setConnectionColor("#000");
+            // Default to main pipe style
+            const defaultPipeStyle = pipeStyles[0];
+            if (window.localStorage) {
+                window.localStorage.setItem(
+                    "pipeStyle",
+                    JSON.stringify(defaultPipeStyle)
+                );
+            }
         }
     };
 
@@ -70,14 +99,26 @@ const ConnectionStyleSelector = ({
         }
     };
 
+    // Get active connection type display name
+    const getActiveConnectionType = () => {
+        const active = connectionTypes.find(
+            (type) => type.value === connectionType
+        );
+        return active ? active.label : "Connection Style";
+    };
+
     return (
         <div className={styles.selectorContainer}>
-            <button className={styles.selectorButton} onClick={toggleMenu}>
-                Connection Style
+            <button
+                ref={buttonRef}
+                className={styles.selectorButton}
+                onClick={toggleMenu}
+            >
+                {getActiveConnectionType()}
             </button>
 
             {isOpen && (
-                <div className={styles.dropdown}>
+                <div ref={dropdownRef} className={styles.dropdown}>
                     <div className={styles.section}>
                         <h4>Connection Type</h4>
                         <div className={styles.options}>
@@ -101,17 +142,41 @@ const ConnectionStyleSelector = ({
                         <div className={styles.section}>
                             <h4>Pipe Style</h4>
                             <div className={styles.options}>
-                                {pipeStyles.map((style) => (
-                                    <div
-                                        key={style.value}
-                                        className={styles.option}
-                                        onClick={() =>
-                                            handlePipeStyleSelect(style)
+                                {pipeStyles.map((style) => {
+                                    // Check if this style is selected by comparing with localStorage
+                                    let isSelected = false;
+                                    try {
+                                        const storedStyle =
+                                            localStorage.getItem("pipeStyle");
+                                        if (storedStyle) {
+                                            const parsed =
+                                                JSON.parse(storedStyle);
+                                            isSelected =
+                                                parsed.value === style.value;
                                         }
-                                    >
-                                        {style.label}
-                                    </div>
-                                ))}
+                                    } catch (e) {
+                                        console.error(
+                                            "Error checking pipe style:",
+                                            e
+                                        );
+                                    }
+
+                                    return (
+                                        <div
+                                            key={style.value}
+                                            className={`${styles.option} ${
+                                                isSelected
+                                                    ? styles.selected
+                                                    : ""
+                                            }`}
+                                            onClick={() =>
+                                                handlePipeStyleSelect(style)
+                                            }
+                                        >
+                                            {style.label}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     )}

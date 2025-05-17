@@ -1,6 +1,7 @@
 .selectorContainer {
     position: relative;
     margin: 0 10px;
+    display: inline-block;
 }
 
 .selectorButton {
@@ -14,6 +15,7 @@
     display: flex;
     align-items: center;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
 }
 
 .selectorButton:hover {
@@ -24,19 +26,23 @@
 .dropdown {
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 0;
     margin-top: 5px;
     min-width: 250px;
     background-color: white;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    z-index: 9999;
     padding: 10px;
 }
 
 .section {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.section:last-child {
+    margin-bottom: 0;
 }
 
 .section h4 {
@@ -55,7 +61,7 @@
 }
 
 .option {
-    padding: 6px 10px;
+    padding: 8px 10px;
     cursor: pointer;
     border-radius: 4px;
     font-size: 13px;

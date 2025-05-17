@@ -1,21 +1,15 @@
 "use client";
 
-import React, { memo, useState, useEffect } from "react";
+import React, { memo, useState, useEffect, useRef } from "react";
 import { Handle, Position } from "reactflow";
 import styles from "./NodeTypes.module.css";
 import Image from "next/image";
 // Basic component with inputs and outputs on all sides
 const BaseCircuitComponent = memo(({ data, selected }) => {
+    const { nodeRef, isHovered } = useHover();
+
     return (
-        <div
-            className={`${styles.circuitNode} ${
-                selected ? styles.selected : ""
-            }`}
-            style={{
-                borderColor: data.borderColor || "#1A192B",
-                backgroundColor: data.backgroundColor || "#ffffff",
-            }}
-        >
+        <div ref={nodeRef}>
             {/* Left handle (input) */}
             <Handle
                 type="target"
@@ -58,12 +52,10 @@ const BaseCircuitComponent = memo(({ data, selected }) => {
 
 // Resistor component with multi-directional handles
 const ResistorNode = memo(({ data, selected }) => {
+    const { nodeRef, isHovered } = useHover();
+
     return (
-        <div
-            className={`${styles.circuitNode} ${styles.resistor} ${
-                selected ? styles.selected : ""
-            }`}
-        >
+        <div ref={nodeRef}>
             {/* Left handle (input) */}
             <Handle
                 type="target"
@@ -85,7 +77,7 @@ const ResistorNode = memo(({ data, selected }) => {
                     <div className={styles.zigzag}></div>
                 </div>
             </div>
-            <div className={styles.label}>{data.label || "Resistor"}</div>
+            {/* <div className={styles.label}>{data.label || "Resistor"}</div> */}
             {data.value && <div className={styles.value}>{data.value}</div>}
 
             {/* Right handle (output) */}
@@ -109,12 +101,10 @@ const ResistorNode = memo(({ data, selected }) => {
 
 // Capacitor component with multi-directional handles
 const CapacitorNode = memo(({ data, selected }) => {
+    const { nodeRef, isHovered } = useHover();
+
     return (
-        <div
-            className={`${styles.circuitNode} ${styles.capacitor} ${
-                selected ? styles.selected : ""
-            }`}
-        >
+        <div ref={nodeRef}>
             {/* Left handle (input) */}
             <Handle
                 type="target"
@@ -162,9 +152,9 @@ const CapacitorNode = memo(({ data, selected }) => {
 const InductorNode = memo(({ data, selected }) => {
     return (
         <div
-            className={`${styles.circuitNode} ${styles.inductor} ${
-                selected ? styles.selected : ""
-            }`}
+        // className={`${styles.circuitNode} ${styles.inductor} ${
+        //     selected ? styles.selected : ""
+        // }`}
         >
             {/* Left handle (input) */}
             <Handle
@@ -215,9 +205,9 @@ const InductorNode = memo(({ data, selected }) => {
 const DiodeNode = memo(({ data, selected }) => {
     return (
         <div
-            className={`${styles.circuitNode} ${styles.diode} ${
-                selected ? styles.selected : ""
-            }`}
+        // className={`${styles.circuitNode} ${styles.diode} ${
+        //     selected ? styles.selected : ""
+        // }`}
         >
             <Handle
                 type="target"
@@ -256,9 +246,9 @@ const DiodeNode = memo(({ data, selected }) => {
 const BatteryNode = memo(({ data, selected }) => {
     return (
         <div
-            className={`${styles.circuitNode} ${styles.battery} ${
-                selected ? styles.selected : ""
-            }`}
+        // className={`${styles.circuitNode} ${styles.battery} ${
+        //     selected ? styles.selected : ""
+        // }`}
         >
             <Handle
                 type="target"
@@ -276,8 +266,8 @@ const BatteryNode = memo(({ data, selected }) => {
                 <div className={styles.batteryNegative}></div>
                 <div className={styles.batteryPositive}></div>
             </div>
-            <div className={styles.label}>{data.label || "Battery"}</div>
-            {data.voltage && <div className={styles.value}>{data.voltage}</div>}
+            {/* <div className={styles.label}>{data.label || "Battery"}</div>
+            {data.voltage && <div className={styles.value}>{data.voltage}</div>} */}
             <Handle
                 type="source"
                 position={Position.Right}
@@ -315,9 +305,9 @@ const SwitchNode = memo(({ data, selected }) => {
 
     return (
         <div
-            className={`${styles.circuitNode} ${styles.switch} ${
-                selected ? styles.selected : ""
-            }`}
+            // className={`${styles.circuitNode} ${styles.switch} ${
+            //     selected ? styles.selected : ""
+            // }`}
             onClick={toggleSwitch}
         >
             <Handle
@@ -341,9 +331,9 @@ const SwitchNode = memo(({ data, selected }) => {
                 ></div>
             </div>
             <div className={styles.label}>{data.label || "Switch"}</div>
-            <div className={styles.switchState}>
+            {/*<div className={styles.switchState}>
                 {isOpen || data.state === "open" ? "Open" : "Closed"}
-            </div>
+            </div> */}
             <Handle
                 type="source"
                 position={Position.Right}
@@ -364,9 +354,9 @@ const SwitchNode = memo(({ data, selected }) => {
 const GroundNode = memo(({ data, selected }) => {
     return (
         <div
-            className={`${styles.circuitNode} ${styles.ground} ${
-                selected ? styles.selected : ""
-            }`}
+        // className={`${styles.circuitNode} ${styles.ground} ${
+        //     selected ? styles.selected : ""
+        // }`}
         >
             <Handle
                 type="target"
@@ -382,7 +372,7 @@ const GroundNode = memo(({ data, selected }) => {
                     <div className={styles.groundLineLarge}></div>
                 </div>
             </div>
-            <div className={styles.label}>{data.label || "Ground"}</div>
+            {/* <div className={styles.label}>{data.label || "Ground"}</div> */}
         </div>
     );
 });
@@ -395,10 +385,10 @@ const ICNode = memo(({ data, selected }) => {
     // Additional handles at top and bottom
     return (
         <div
-            className={`${styles.circuitNode} ${styles.ic} ${
-                selected ? styles.selected : ""
-            }`}
-            style={{ minWidth: "120px", minHeight: "80px" }}
+        // className={`${styles.circuitNode} ${styles.ic} ${
+        //     selected ? styles.selected : ""
+        // }`}
+        // style={{ minWidth: "120px", minHeight: "80px" }}
         >
             {/* Input handles on left side */}
             {Array.from({ length: inputCount }).map((_, i) => (
@@ -455,9 +445,9 @@ const ICNode = memo(({ data, selected }) => {
 const TransistorNode = memo(({ data, selected }) => {
     return (
         <div
-            className={`${styles.circuitNode} ${styles.transistor} ${
-                selected ? styles.selected : ""
-            }`}
+        // className={`${styles.circuitNode} ${styles.transistor} ${
+        //     selected ? styles.selected : ""
+        // }`}
         >
             {/* Handles for connections */}
             <Handle
@@ -553,10 +543,10 @@ const TransistorNode = memo(({ data, selected }) => {
                 )}
             </svg>
 
-            <div className={styles.label}>{data.label || "Transistor"}</div>
+            {/* <div className={styles.label}>{data.label || "Transistor"}</div>
             {data.type && (
                 <div className={styles.value}>{data.type.toUpperCase()}</div>
-            )}
+            )} */}
         </div>
     );
 });
@@ -568,14 +558,14 @@ const MicrocontrollerNode = memo(({ data, selected }) => {
 
     return (
         <div
-            className={`${styles.circuitNode} ${styles.microcontroller} ${
-                selected ? styles.selected : ""
-            }`}
-            style={{
-                minWidth: "140px",
-                minHeight: "100px",
-                backgroundColor: data.backgroundColor || "#f0f8ff",
-            }}
+        // className={`${styles.circuitNode} ${styles.microcontroller} ${
+        //     selected ? styles.selected : ""
+        // }`}
+        // style={{
+        //     minWidth: "140px",
+        //     minHeight: "100px",
+        //     backgroundColor: data.backgroundColor || "#f0f8ff",
+        // }}
         >
             {/* Input handles on left side */}
             {Array.from({ length: inputCount }).map((_, i) => (
@@ -695,23 +685,21 @@ const MicrocontrollerNode = memo(({ data, selected }) => {
                 </svg>
             </div>
 
-            <div className={styles.label}>
+            {/* <div className={styles.label}>
                 {data.label || "Microcontroller"}
             </div>
             {data.chipModel && (
                 <div className={styles.value}>{data.chipModel}</div>
-            )}
+            )} */}
         </div>
     );
 });
 
 const ActuatorNode = memo(({ data, selected }) => {
+    const { nodeRef, isHovered } = useHover();
+
     return (
-        <div
-            className={`${styles.circuitNode} ${
-                selected ? styles.selected : ""
-            }`}
-        >
+        <div ref={nodeRef}>
             {/* Left handle */}
             <Handle
                 type="target"
@@ -728,7 +716,7 @@ const ActuatorNode = memo(({ data, selected }) => {
                 id="right-input"
             />
 
-            <div className={styles.nodeContent}>
+            <div>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 40 40"
@@ -742,14 +730,55 @@ const ActuatorNode = memo(({ data, selected }) => {
                 </svg>
             </div>
 
-            <div className={styles.label}>{data.label || "Actuator"}</div>
+            {/* <div className={styles.label}>{data.label || "Actuator"}</div> */}
         </div>
     );
 });
 
+// Helper function to get appropriate handle styles
+const getHandleStyles = (isHovered = false) => {
+    return {
+        width: "10px",
+        height: "10px",
+        background: "#1a192b",
+        border: "2px solid #fff",
+        boxShadow: "0 0 0 2px rgba(26, 25, 43, 0.5)",
+        opacity: isHovered ? 1 : 0,
+        transition: "opacity 0.2s ease, background-color 0.2s ease",
+        cursor: "crosshair",
+    };
+};
+
+// Make useHover hook to handle connection points visibility
+const useHover = () => {
+    const [isHovered, setIsHovered] = useState(false);
+    const [isSelected, setIsSelected] = useState(false);
+
+    const nodeRef = useRef(null);
+
+    const handleMouseEnter = () => setIsHovered(true);
+    const handleMouseLeave = () => setIsHovered(false);
+
+    useEffect(() => {
+        const node = nodeRef.current;
+        if (node) {
+            node.addEventListener("mouseenter", handleMouseEnter);
+            node.addEventListener("mouseleave", handleMouseLeave);
+
+            return () => {
+                node.removeEventListener("mouseenter", handleMouseEnter);
+                node.removeEventListener("mouseleave", handleMouseLeave);
+            };
+        }
+    }, []);
+
+    return { nodeRef, isHovered, setIsSelected, isSelected };
+};
+
 // P&ID Symbol Node that uses SVG files from the public/symbols folder
 const PIDSymbolNode = memo(({ data, selected }) => {
     const [svgContent, setSvgContent] = useState("");
+    const { nodeRef, isHovered } = useHover();
 
     // Load SVG content on component mount
     useEffect(() => {
@@ -815,38 +844,46 @@ const PIDSymbolNode = memo(({ data, selected }) => {
                     position={position}
                     id={connector.id}
                     className={styles.handle}
-                    style={connector.style || {}}
+                    style={{
+                        width: "12px",
+                        height: "12px",
+                        background: "#555",
+                        border: "2px solid #fff",
+                        opacity: isHovered || selected ? 1 : 0,
+                        transition: "opacity 0.2s ease",
+                    }}
                 />
             );
         });
     };
 
     return (
-        <div
-        // className={`${styles.circuitNode} ${styles.pidSymbol} ${
-        //     selected ? styles.selected : ""
-        // }`}
-        // style={{
-        //     minWidth: data.width || "100px",
-        //     minHeight: data.height || "60px",
-        //     backgroundColor: data.backgroundColor || "white",
-        // }}
-        >
+        <div ref={nodeRef}>
             {renderHandles()}
 
-            <div>
-                {svgContent ? (
-                    <div
-                        className={styles.svgWrapper}
-                        dangerouslySetInnerHTML={{ __html: svgContent }}
-                    />
-                ) : (
-                    <div className={styles.loadingSymbol}>Loading...</div>
-                )}
-            </div>
-
-            {/* <div className={styles.label}>{data.label || "P&ID Symbol"}</div> */}
-            {/* {data.info && <div className={styles.value}>{data.info}</div>} */}
+            {svgContent ? (
+                <div
+                    className={styles.svgWrapper}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                    dangerouslySetInnerHTML={{ __html: svgContent }}
+                />
+            ) : (
+                <div
+                    style={{
+                        fontSize: "12px",
+                        color: "#888",
+                        padding: "10px",
+                    }}
+                >
+                    Loading...
+                </div>
+            )}
         </div>
     );
 });

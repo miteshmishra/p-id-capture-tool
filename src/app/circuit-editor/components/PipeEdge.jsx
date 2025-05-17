@@ -35,6 +35,7 @@ const PipeEdge = ({
             targetX,
             targetY,
             targetPosition,
+            curvature: 0.4, // Increase curvature for better visibility
         });
 
         setEdgePath(path);
@@ -47,24 +48,36 @@ const PipeEdge = ({
     const pipeColor = data?.color || "#333";
     const pipeWidth = data?.width || 2;
 
-    // CSS classes for different pipe types
-    let pipeClass = styles.pipeConnector;
-    if (pipeType === "pneumatic") pipeClass += ` ${styles.pneumatic}`;
-    if (pipeType === "dashed") pipeClass += ` ${styles.dashed}`;
-    if (selected) pipeClass += ` ${styles.selected}`;
-
-    const strokeStyle = {
+    // Inline styles for different pipe types
+    const baseStyle = {
         stroke: pipeColor,
         strokeWidth: pipeWidth,
+        ...style,
+    };
+
+    let dashedStyle = {};
+    if (pipeType === "pneumatic") {
+        dashedStyle = { strokeDasharray: "10, 3" };
+    } else if (pipeType === "dashed") {
+        dashedStyle = { strokeDasharray: "5, 5" };
+    }
+
+    const selectedStyle = selected
+        ? { stroke: "#ff0072", strokeWidth: pipeWidth + 1 }
+        : {};
+
+    const combinedStyle = {
+        ...baseStyle,
+        ...dashedStyle,
+        ...selectedStyle,
     };
 
     return (
         <>
             <path
                 id={id}
-                className={pipeClass}
                 d={edgePath}
-                style={{ ...strokeStyle, ...style }}
+                style={combinedStyle}
                 markerEnd={markerEnd}
             />
             {data?.label && (

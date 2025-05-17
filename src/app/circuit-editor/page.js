@@ -12,6 +12,7 @@ import ReactFlow, {
     useEdgesState,
     useKeyPress,
     useReactFlow,
+    BackgroundVariant,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import styles from "./page.module.css";
@@ -147,18 +148,18 @@ export default function CircuitEditor() {
                 };
             }
 
-            // Create a proper edge with styling for better visibility
+            // Create a proper edge with styling
             const newEdge = {
                 ...params,
                 id: edgeId,
                 type: connectionType,
                 animated: false,
                 style: {
-                    strokeWidth: 2,
+                    strokeWidth: connectionType === "pipe" ? 3 : 2,
                     stroke: connectionColor,
                 },
                 data: edgeData,
-                // Add both markers for bidirectional type
+                // Add markers based on connection type
                 markerEnd:
                     connectionType !== "pipe"
                         ? {
@@ -932,7 +933,12 @@ export default function CircuitEditor() {
                         >
                             <Controls />
                             <MiniMap />
-                            <Background variant="dots" gap={20} size={1} />
+                            {/* <Background variant="lines" gap={20} size={1} /> */}
+                            <Background
+                                variant={BackgroundVariant.Lines}
+                                gap={20} // optional: spacing between lines
+                                color="#eee" // optional: line color
+                            />
                             <Panel
                                 position="top-right"
                                 className={styles.panel}
@@ -1008,7 +1014,10 @@ export default function CircuitEditor() {
                                 </div>
                             </Panel>
 
-                            <Panel position="top-left" className={styles.panel}>
+                            <Panel
+                                position="top-left"
+                                className={`${styles.panel} ${styles.connectionPanel}`}
+                            >
                                 <ConnectionStyleSelector
                                     connectionType={connectionType}
                                     setConnectionType={setConnectionType}
