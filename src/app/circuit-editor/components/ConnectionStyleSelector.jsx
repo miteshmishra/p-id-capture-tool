@@ -1,55 +1,149 @@
-import React from 'react';
-import styles from './ConnectionStyleSelector.module.css';
+"use client";
 
-const connectionStyles = [
-  { id: 'smoothstep', label: 'Smooth Step', icon: '〰️' },
-  { id: 'straight', label: 'Straight', icon: '➖' },
-  { id: 'step', label: 'Step', icon: '┐┌' },
-  { id: 'bezier', label: 'Bezier', icon: '⤳' },
-  { id: 'bidirectional', label: 'Bidirectional', icon: '↔️' }
-];
+import React, { useState } from "react";
+import styles from "./ConnectionStyleSelector.module.css";
 
-const connectionColors = [
-  { id: '#555', label: 'Gray', hex: '#555' },
-  { id: '#1a73e8', label: 'Blue', hex: '#1a73e8' },
-  { id: '#d93025', label: 'Red', hex: '#d93025' },
-  { id: '#188038', label: 'Green', hex: '#188038' },
-  { id: '#f9ab00', label: 'Yellow', hex: '#f9ab00' },
-  { id: '#9334e6', label: 'Purple', hex: '#9334e6' },
-];
+const ConnectionStyleSelector = ({
+    connectionType,
+    setConnectionType,
+    connectionColor,
+    setConnectionColor,
+}) => {
+    const [isOpen, setIsOpen] = useState(false);
 
-const ConnectionStyleSelector = ({ currentStyle, currentColor, onStyleChange, onColorChange }) => {
-  return (
-    <div className={styles.connectionStyleSelector}>
-      <h4>Connection Style</h4>
-      <div className={styles.styleOptions}>
-        {connectionStyles.map((style) => (
-          <button
-            key={style.id}
-            className={`${styles.styleButton} ${currentStyle === style.id ? styles.selected : ''}`}
-            onClick={() => onStyleChange(style.id)}
-            title={style.label}
-          >
-            <span className={styles.styleIcon}>{style.icon}</span>
-            <span className={styles.styleLabel}>{style.label}</span>
-          </button>
-        ))}
-      </div>
-      
-      <h4>Connection Color</h4>
-      <div className={styles.colorOptions}>
-        {connectionColors.map((color) => (
-          <button
-            key={color.id}
-            className={`${styles.colorButton} ${currentColor === color.id ? styles.selected : ''}`}
-            onClick={() => onColorChange(color.id)}
-            title={color.label}
-            style={{ backgroundColor: color.hex }}
-          />
-        ))}
-      </div>
-    </div>
-  );
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const connectionTypes = [
+        { value: "default", label: "Straight" },
+        { value: "step", label: "Orthogonal" },
+        { value: "smoothstep", label: "Smooth Orthogonal" },
+        { value: "bezier", label: "Bezier Curve" },
+        { value: "bidirectional", label: "Bidirectional" },
+        { value: "pipe", label: "P&ID Pipe (Main)" },
+    ];
+
+    const pipeStyles = [
+        {
+            value: "main",
+            label: "Main Pipe",
+            type: "pipe",
+            data: { pipeType: "main" },
+        },
+        {
+            value: "pneumatic",
+            label: "Pneumatic Pipe",
+            type: "pipe",
+            data: { pipeType: "pneumatic" },
+        },
+        {
+            value: "dashed",
+            label: "Dashed Pipe",
+            type: "pipe",
+            data: { pipeType: "dashed" },
+        },
+    ];
+
+    const colors = [
+        { value: "#555", label: "Default (Gray)" },
+        { value: "#000", label: "Black" },
+        { value: "#2196F3", label: "Blue" },
+        { value: "#4CAF50", label: "Green" },
+        { value: "#F44336", label: "Red" },
+        { value: "#FFC107", label: "Yellow" },
+    ];
+
+    const handleTypeChange = (type) => {
+        setConnectionType(type);
+        if (type === "pipe") {
+            // When selecting pipe, set color differently to make it visible
+            setConnectionColor("#000");
+        }
+    };
+
+    const handlePipeStyleSelect = (pipeStyle) => {
+        setConnectionType("pipe");
+        // Store the pipe type data in the connectionType
+        if (window.localStorage) {
+            window.localStorage.setItem("pipeStyle", JSON.stringify(pipeStyle));
+        }
+    };
+
+    return (
+        <div className={styles.selectorContainer}>
+            <button className={styles.selectorButton} onClick={toggleMenu}>
+                Connection Style
+            </button>
+
+            {isOpen && (
+                <div className={styles.dropdown}>
+                    <div className={styles.section}>
+                        <h4>Connection Type</h4>
+                        <div className={styles.options}>
+                            {connectionTypes.map((type) => (
+                                <div
+                                    key={type.value}
+                                    className={`${styles.option} ${
+                                        connectionType === type.value
+                                            ? styles.selected
+                                            : ""
+                                    }`}
+                                    onClick={() => handleTypeChange(type.value)}
+                                >
+                                    {type.label}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {connectionType === "pipe" && (
+                        <div className={styles.section}>
+                            <h4>Pipe Style</h4>
+                            <div className={styles.options}>
+                                {pipeStyles.map((style) => (
+                                    <div
+                                        key={style.value}
+                                        className={styles.option}
+                                        onClick={() =>
+                                            handlePipeStyleSelect(style)
+                                        }
+                                    >
+                                        {style.label}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className={styles.section}>
+                        <h4>Connection Color</h4>
+                        <div className={styles.colorOptions}>
+                            {colors.map((color) => (
+                                <div
+                                    key={color.value}
+                                    className={`${styles.colorOption} ${
+                                        connectionColor === color.value
+                                            ? styles.selectedColor
+                                            : ""
+                                    }`}
+                                    style={{ backgroundColor: color.value }}
+                                    onClick={() =>
+                                        setConnectionColor(color.value)
+                                    }
+                                    title={color.label}
+                                >
+                                    {connectionColor === color.value && (
+                                        <span>✓</span>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 };
 
-export default ConnectionStyleSelector; 
+export default ConnectionStyleSelector;

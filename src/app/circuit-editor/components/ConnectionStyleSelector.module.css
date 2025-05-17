@@ -1,81 +1,104 @@
-.connectionStyleSelector {
-  padding: 10px;
-  background-color: #f5f5f5;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  width: 220px;
+.selectorContainer {
+    position: relative;
+    margin: 0 10px;
 }
 
-.connectionStyleSelector h4 {
-  margin-top: 10px;
-  margin-bottom: 8px;
-  font-size: 14px;
-  color: #333;
+.selectorButton {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.connectionStyleSelector h4:first-child {
-  margin-top: 0;
+.selectorButton:hover {
+    background-color: #f5f5f5;
+    border-color: #ccc;
 }
 
-.styleOptions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+.dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 5px;
+    min-width: 250px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 10px;
 }
 
-.styleButton {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 5px 8px;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.section {
+    margin-bottom: 12px;
 }
 
-.styleButton:hover {
-  background-color: #f0f0f0;
-  border-color: #aaa;
+.section h4 {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 8px 0;
+    color: #555;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #eee;
 }
 
-.styleButton.selected {
-  background-color: #e6f7ff;
-  border-color: #1890ff;
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.styleIcon {
-  font-size: 18px;
-  margin-bottom: 3px;
+.option {
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 13px;
+    transition: all 0.2s;
 }
 
-.styleLabel {
-  font-size: 12px;
+.option:hover {
+    background-color: #f0f0f0;
 }
 
-/* Color options */
+.option.selected {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: #2196f3;
+    font-weight: 500;
+}
+
 .colorOptions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.colorButton {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid #eee;
-  cursor: pointer;
-  transition: transform 0.2s;
+.colorOption {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
 }
 
-.colorButton:hover {
-  transform: scale(1.1);
+.colorOption:hover {
+    transform: scale(1.1);
 }
 
-.colorButton.selected {
-  border-color: #fff;
-  box-shadow: 0 0 0 2px #1890ff;
-} 
+.colorOption span {
+    color: white;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.selectedColor {
+    box-shadow: 0 0 0 2px #2196f3;
+}
