@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import styles from "./CircuitComponentsPanel.module.css";
 
 const CircuitComponentsPanel = ({ onComponentSelect }) => {
-    const [activeTab, setActiveTab] = useState("basic");
-
     // Add drag start handler
     const onDragStart = (event, component) => {
         event.dataTransfer.setData(
@@ -16,17 +14,18 @@ const CircuitComponentsPanel = ({ onComponentSelect }) => {
     };
 
     const basicComponents = [
-        { name: "Resistor", type: "resistor", data: { label: "Resistor" } },
-        { name: "Capacitor", type: "capacitor", data: { label: "Capacitor" } },
-        { name: "Inductor", type: "inductor", data: { label: "Inductor" } },
-        { name: "Diode", type: "diode", data: { label: "Diode" } },
-        { name: "Battery", type: "battery", data: { label: "Battery" } },
+        { name: "Resistor", type: "resistor", data: { label: "Resistor" }, icon: "/symbols/instrument.svg" },
+        { name: "Capacitor", type: "capacitor", data: { label: "Capacitor" }, icon: "/symbols/instrument.svg" },
+        { name: "Inductor", type: "inductor", data: { label: "Inductor" }, icon: "/symbols/instrument.svg" },
+        { name: "Diode", type: "diode", data: { label: "Diode" }, icon: "/symbols/instrument.svg" },
+        { name: "Battery", type: "battery", data: { label: "Battery" }, icon: "/symbols/instrument.svg" },
         {
             name: "Switch",
             type: "switch",
             data: { label: "Switch", state: "open" },
+            icon: "/symbols/valve-ball.svg"
         },
-        { name: "Ground", type: "ground", data: { label: "Ground" } },
+        { name: "Ground", type: "ground", data: { label: "Ground" }, icon: "/symbols/pipe-main.svg" },
     ];
 
     const advancedComponents = [
@@ -34,11 +33,13 @@ const CircuitComponentsPanel = ({ onComponentSelect }) => {
             name: "IC/Chip",
             type: "ic",
             data: { label: "IC", inputs: 3, outputs: 3 },
+            icon: "/symbols/instrument.svg"
         },
         {
             name: "Transistor",
             type: "transistor",
             data: { label: "Transistor", type: "npn" },
+            icon: "/symbols/instrument.svg"
         },
         {
             name: "Microcontroller",
@@ -49,8 +50,14 @@ const CircuitComponentsPanel = ({ onComponentSelect }) => {
                 inputs: 5,
                 outputs: 5,
             },
+            icon: "/symbols/instrument.svg"
         },
-        { name: "Actuator", type: "actuator", data: { label: "Actuator" } },
+        { 
+            name: "Actuator", 
+            type: "actuator", 
+            data: { label: "Actuator" },
+            icon: "/symbols/actuator-motor.svg"
+        },
     ];
 
     // Add P&ID components
@@ -69,6 +76,7 @@ const CircuitComponentsPanel = ({ onComponentSelect }) => {
                     { id: "right", position: "right", type: "source" },
                 ],
             },
+            icon: "/symbols/valve-ball.svg"
         },
         {
             name: "Valve (Globe)",
@@ -84,6 +92,7 @@ const CircuitComponentsPanel = ({ onComponentSelect }) => {
                     { id: "right", position: "right", type: "source" },
                 ],
             },
+            icon: "/symbols/globe-valve.svg"
         },
         {
             name: "Pump",
@@ -99,6 +108,7 @@ const CircuitComponentsPanel = ({ onComponentSelect }) => {
                     { id: "right", position: "right", type: "source" },
                 ],
             },
+            icon: "/symbols/pump.svg"
         },
         {
             name: "Tank",
@@ -114,6 +124,7 @@ const CircuitComponentsPanel = ({ onComponentSelect }) => {
                     { id: "bottom", position: "bottom", type: "source" },
                 ],
             },
+            icon: "/symbols/tank.svg"
         },
         {
             name: "Heat Exchanger",
@@ -131,6 +142,7 @@ const CircuitComponentsPanel = ({ onComponentSelect }) => {
                     { id: "bottom", position: "bottom", type: "source" },
                 ],
             },
+            icon: "/symbols/heat-exchanger.svg"
         },
         {
             name: "Flow Meter",
@@ -146,102 +158,47 @@ const CircuitComponentsPanel = ({ onComponentSelect }) => {
                     { id: "right", position: "right", type: "source" },
                 ],
             },
+            icon: "/symbols/flow-meter.svg"
         },
     ];
 
+    // Component renderer function
+    const renderComponentGroup = (components, title) => (
+        <div className={styles.componentGroup}>
+            <h3 className={styles.groupTitle}>{title}</h3>
+            <div className={styles.groupItems}>
+                {components.map((component, index) => (
+                    <div
+                        key={index}
+                        className={styles.componentItem}
+                        onClick={() => onComponentSelect(component)}
+                        onDragStart={(event) => onDragStart(event, component)}
+                        draggable
+                        title={component.name}
+                    >
+                        <div className={styles.componentIcon}>
+                            {component.icon ? 
+                                <img 
+                                    src={component.icon} 
+                                    alt={component.name} 
+                                    width="32" 
+                                    height="32" 
+                                /> : 
+                                component.name[0]
+                            }
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+
     return (
         <div className={styles.componentsPanel}>
-            <div className={styles.tabs}>
-                <button
-                    className={`${styles.tab} ${
-                        activeTab === "basic" ? styles.active : ""
-                    }`}
-                    onClick={() => setActiveTab("basic")}
-                >
-                    Basic
-                </button>
-                <button
-                    className={`${styles.tab} ${
-                        activeTab === "advanced" ? styles.active : ""
-                    }`}
-                    onClick={() => setActiveTab("advanced")}
-                >
-                    Advanced
-                </button>
-                <button
-                    className={`${styles.tab} ${
-                        activeTab === "pid" ? styles.active : ""
-                    }`}
-                    onClick={() => setActiveTab("pid")}
-                >
-                    P&ID
-                </button>
-            </div>
-
             <div className={styles.componentsList}>
-                {activeTab === "basic" &&
-                    basicComponents.map((component, index) => (
-                        <div
-                            key={index}
-                            className={styles.componentItem}
-                            onClick={() => onComponentSelect(component)}
-                            onDragStart={(event) =>
-                                onDragStart(event, component)
-                            }
-                            draggable
-                            title={component.name}
-                        >
-                            <div className={styles.componentIcon}>
-                                {component.icon || component.name[0]}
-                            </div>
-                            <div className={styles.componentLabel}>
-                                {component.name}
-                            </div>
-                        </div>
-                    ))}
-
-                {activeTab === "advanced" &&
-                    advancedComponents.map((component, index) => (
-                        <div
-                            key={index}
-                            className={styles.componentItem}
-                            onClick={() => onComponentSelect(component)}
-                            onDragStart={(event) =>
-                                onDragStart(event, component)
-                            }
-                            draggable
-                            title={component.name}
-                        >
-                            <div className={styles.componentIcon}>
-                                {component.icon || component.name[0]}
-                            </div>
-                            <div className={styles.componentLabel}>
-                                {component.name}
-                            </div>
-                        </div>
-                    ))}
-
-                {activeTab === "pid" &&
-                    pidComponents.map((component, index) => (
-                        <div
-                            key={index}
-                            className={styles.componentItem}
-                            onClick={() => onComponentSelect(component)}
-                            onDragStart={(event) =>
-                                onDragStart(event, component)
-                            }
-                            draggable
-                            title={component.name}
-                        >
-                            <div className={styles.componentIcon}>
-                                {component.icon ||
-                                    component.name.split("(")[0][0]}
-                            </div>
-                            <div className={styles.componentLabel}>
-                                {component.name}
-                            </div>
-                        </div>
-                    ))}
+                {renderComponentGroup(basicComponents, "Basic Components")}
+                {renderComponentGroup(advancedComponents, "Advanced Components")}
+                {renderComponentGroup(pidComponents, "P&ID Components")}
             </div>
         </div>
     );
